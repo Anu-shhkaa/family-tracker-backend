@@ -78,6 +78,19 @@ app.delete('/delete-expense/:id', async (req,res) => {
         res.status(500).json({error: "Failed to delete"});
     }
 });
+
+app.put('/update-expense/:id', async(req, res) => {
+try{
+    const updatedExpense = await Expense.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new: true }
+    );
+    res.json(updatedExpense);
+} catch (error) {
+    res.status(500).json({error: "Failed to update"});
+}
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

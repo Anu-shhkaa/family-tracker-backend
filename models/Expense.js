@@ -18,6 +18,10 @@ const ExpenseSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isPending:{
+        type: Boolean,
+        default: false
+    },
     category: {
         type: String,
         required: true,

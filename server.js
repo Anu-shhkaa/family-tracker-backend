@@ -91,6 +91,32 @@ try{
     res.status(500).json({error: "Failed to update"});
 }
 });
+
+app.patch('/request-settlement/:id', async(req, res) => {
+    try {
+        const updated = await Expense.findByIdAndUpdate(
+            req.params.id,
+            {isPending:true},
+            {new: true}
+        );
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json({error: "Failed to request"});
+    }
+});
+
+app.patch('/confirm-settlement/:id', async (req, res) => {
+    try {
+        const updated = await Expense.findByIdAndUpdate(
+        req.params.id,
+        { isSettled: true, isPending: false},
+        {new: true}
+        );
+      res.json(updated);
+    } catch (error) {
+        res.status(500).json({error:"Failed to confirm"});
+    }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

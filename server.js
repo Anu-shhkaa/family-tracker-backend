@@ -39,7 +39,7 @@ app.get('/expenses',async(req,res)=>{
 
         const debtSummary = {};
         allExpenses.forEach(item =>{
-            if(!item.isSettled) {
+            if(!item.isSettled && item.paidBy !== 'Papa') {
                 if(!debtSummary[item.paidBy]){
                     debtSummary[item.paidBy] = 0;
                 }
@@ -66,6 +66,16 @@ app.patch('/settle-expense/:id',async(req, res) => {
         res.json(updatedExpense);
     } catch(error) {
         res.status(500).json({error: "Failed to settle"});
+    }
+});
+
+app.delete('/delete-expense/:id', async (req,res) => {
+    try {
+        const deleted = await Expense.findByIdAndDelete(req.params.id);
+        if(!deleted) return res.status(404).json({error: " Expsense not found"});
+        res.json({message: "Deleted successfully"});
+    } catch (error) {
+        res.status(500).json({error: "Failed to delete"});
     }
 });
 const PORT = process.env.PORT || 5000;
